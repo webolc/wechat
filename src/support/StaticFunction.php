@@ -9,7 +9,6 @@
 
 namespace yangyongxu\wechat\support;
 
-use think\Log;
 /**
  * 静态方法类库
  * Power: Mikkle

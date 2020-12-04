@@ -9,11 +9,8 @@
 
 namespace yangyongxu\wechat\base;
 
-use yangyongxu\think\Config;
-use yangyongxu\think\Exception;
 use yangyongxu\wechat\Wechat;
-use think\Hook;
-use think\Request;
+use think\exception\ValidateException;
 
 /**
  * 微信消息接口基类
@@ -40,15 +37,8 @@ abstract class BaseWechatApi
 
     public function __construct($options = [])
     {
-        $this->request = Request::instance();
-        $this->options = !empty($options) ? $options : $this->options;
-        if (empty($options)&& !empty( Config::get("wechat.default_options_name"))){
-            $this->options = Config::get("wechat")[Config::get("wechat.default_options_name")];
-        }elseif(is_string($options)&&!empty( Config::get("wechat.$options"))){
-            $this->options = Config::get("wechat.$options");
-        }
         if(empty($this->options)){
-            throw new Exception("微信配置参数错误");
+        	throw new ValidateException("微信配置参数错误");
         }
         $this->app_id = $this->options['appid'];
         $this->weObj = Wechat::receive($this->options);
@@ -84,7 +74,7 @@ abstract class BaseWechatApi
             //用户检测，如果有就存入data,没有则存入数据库
             $fans = $this->hasSaveFans();
             if (!$fans) {
-                throw new Exception("获取粉丝信息错误");
+                throw new ValidateException("获取粉丝信息错误");
             }
 
             if($this->isHook){
@@ -145,7 +135,7 @@ abstract class BaseWechatApi
             }
             die;
 
-        } catch (Exception $e) {
+        } catch (ValidateException $e) {
             $this->weObj->text("系统完善中,请原谅我不知道如何回答你的问题!")->reply();
             die();
         }

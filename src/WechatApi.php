@@ -318,7 +318,4 @@ class WechatApi extends BaseWechatApi
         return $reply['message'] = 'success';
     }
 
-
-
-
 }

@@ -23,14 +23,11 @@ use yangyongxu\wechat\src\Poi;
 use yangyongxu\wechat\src\Receive;
 use yangyongxu\wechat\src\Script;
 use yangyongxu\wechat\src\User;
-use yangyongxu\wechat\support\Exception;
-
-use think\Config;
+use think\exception\ValidateException;
 
 class Wechat
 {
     static protected $instance;
-
 
     public function __construct(array $options = [])
     {
@@ -275,19 +272,14 @@ class Wechat
 
 
     protected static function getOptions( $options = []){
-        if (empty($options)&& !empty( Config::get("wechat.default_options_name"))){
-            $options = Config::get("wechat")[Config::get("wechat.default_options_name")];
-        }elseif(is_string($options)&&!empty( Config::get("wechat.$options"))){
-            $options = Config::get("wechat.$options");
-        }
         if (empty($options)) {
             $error[]="获取Token参数缺失";
-            throw new \Exception("微信配置参数不存在");
+            throw new ValidateException("微信配置参数不存在");
             return false ;
         }elseif(isset($options["appid"])&&isset($options["appsecret"])){
             return $options ;
         }else{
-            throw new \Exception("微信配置参数不完整");
+            throw new ValidateException("微信配置参数不完整");
             return false ;
         }
     }
@@ -295,8 +287,5 @@ class Wechat
     static public function getErrText($code){
         return ErrCode::getErrText($code);
     }
-
-
-
 
 }

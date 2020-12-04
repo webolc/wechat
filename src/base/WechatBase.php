@@ -9,10 +9,8 @@
 
 namespace yangyongxu\wechat\base;
 
-
-use think\Config;
 use yangyongxu\wechat\support\Curl;
-use wechat\support\StaticFunction;
+use yangyongxu\wechat\support\StaticFunction;
 use think\Cache;
 
 class WechatBase
@@ -36,9 +34,6 @@ class WechatBase
 
     public function __construct($options=[])
     {
-        if (empty($options)&& !empty( Config::get("wechat.default_options_name"))){
-            $options = Config::get("wechat.default_options_name");
-        }
         $this->appId = $options["appid"];
         $this->secret = $options["appsecret"];
         $this->cacheKey = $this->prefix.$options["appid"];
